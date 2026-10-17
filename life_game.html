@@ -77,10 +77,8 @@
       height: auto;
       image-rendering: pixelated;
     }
-    #scene { width: 100%; height: auto; aspect-ratio: 8 / 3; object-fit: cover; }
-    .sceneCaption { position: absolute; left: 20px; bottom: 18px; max-width: min(66%, 520px); padding: 10px 14px; border: 1px solid #ffffffa8; border-radius: 12px; background: #fffdf0e8; box-shadow: 0 4px 15px #1f372b24; }
-    .sceneCaption strong { display: block; font-size: 1.02rem; }
-    .sceneCaption span { color: var(--muted); font-size: .84rem; }
+    #scene { width: 100%; height: auto; aspect-ratio: 16 / 5; }
+    .sceneCaption { display: none; }
     .card {
       margin: 18px 0;
       padding: 22px;
@@ -178,9 +176,9 @@
     @media (max-width: 560px) {
       main { margin-top: 18px; }
       .card { padding: 15px; }
-      #scene { min-height: 150px; }
+      #scene { min-height: 0; }
       .progress { height: 13px; }
-      .sceneCaption { left: 10px; bottom: 10px; max-width: calc(100% - 20px); padding: 7px 9px; }
+      .sceneCaption { top: 8px; left: 8px; max-width: min(55%, 260px); padding: 6px 8px; }
       .sceneCaption strong { font-size: .88rem; }
       .sceneCaption span { font-size: .72rem; }
       .stats { gap: 11px; }
@@ -215,7 +213,7 @@
       color: var(--ink); border: 1px solid #26363a; border-radius: 4px; background: #111a1d; box-shadow: none;
     }
     .visuals { margin: 0; border: 1px solid #26363a; border-radius: 4px; background: #111a1d; box-shadow: none; }
-    .sceneCaption { color: #e4e8e9; border-color: #34464a; border-radius: 4px; background: #10191de8; box-shadow: none; }
+    .sceneCaption { color: #e4e8e9; }
     .sceneCaption span { color: #a7b7ba; }
     .gameDashboard:not(.hidden) { display: block; }
     .dashboardTop { margin: 0 auto 14px; }
@@ -247,7 +245,7 @@
     .lifeDashboard .dashboardTop .gameToolbar #languageToggle,
     .lifeDashboard .dashboardTop .gameToolbar #themeToggle { min-width: 32px; padding-inline: 7px; }
     .lifeDashboard .dashboardTop #liveToolbar { gap: 5px; align-items: center; margin: 5px 0 0; }
-    .lifeDashboard .dashboardCenter > .visuals { min-height: 185px; }
+    .lifeDashboard .dashboardCenter > .visuals { min-height: 0; }
     .lifeDashboard #dashboardLifeMap .yearBoardWrap { max-height: 245px; }
     .lifeDashboard #dashboardLifeRecord .lifeRecord { grid-template-columns: 1fr 1fr; }
     .lifeDashboard #dashboardCountryData details { max-height: 380px; overflow-y: auto; }
@@ -319,7 +317,7 @@
     .dashboardPanel .birthBody { display: grid; grid-template-columns: 1fr; gap: 0; padding: 11px; background: #111a1d; }
     .dashboardPanel .passportIdentity { display: flex; align-items: center; gap: 10px; min-width: 0; margin-bottom: 8px; }
     .dashboardPanel .passportPortrait { display: grid; flex: 0 0 54px; place-items: center; width: 54px; height: 62px; overflow: hidden; border: 3px solid #79c6c0; background: repeating-linear-gradient(0deg, transparent 0 6px, #182b2c 6px 8px), linear-gradient(145deg, #efb47c 0 40%, #537b72 40% 73%, #a98b64 73%); box-shadow: inset 0 0 0 2px #d7e8cf; }
-    .dashboardPanel .passportPortrait span { display: grid; place-items: center; width: 27px; height: 31px; border: 4px solid #604438; border-radius: 2px; color: #f1d0aa; background: #926d55; font: 800 .72rem ui-monospace, monospace; box-shadow: 0 17px 0 2px #33756d; }
+    .dashboardPanel .passportPortrait img { display: block; width: 100%; height: 100%; object-fit: contain; image-rendering: pixelated; }
     .dashboardPanel .passportIdentityText { min-width: 0; }
     .dashboardPanel .passportIdentityText > small { display: block; color: #9caeb2; font-size: .58rem; letter-spacing: .08em; }
     .dashboardPanel .birthName { margin: 0; color: #e5e9e3; font-size: 1.18rem; line-height: 1.15; overflow-wrap: anywhere; }
@@ -468,6 +466,7 @@
     #birthCeremony:not(.hidden) { position: fixed; z-index: 100; inset: 0; display: grid; place-items: center; overflow-y: auto; padding: 24px 14px; background: #0d1417; }
     .ceremonyStage { width: min(620px, 100%); margin: auto; }
     .countryDraw { min-height: min(50vh, 400px); display: grid; align-content: center; justify-items: center; text-align: center; }
+    .birthGlobe { display: block; width: min(100%, 900px); height: auto; margin: 0 auto -15px; overflow: visible; }
     .countryDrawLabel { margin: 0 0 13px; color: #87999d; font-size: .72rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
     .countryDrawName { min-height: 1.2em; margin: 0; color: #e8e8df; font: 700 clamp(2.6rem, 9vw, 5rem)/1.12 "Trebuchet MS", system-ui, sans-serif; letter-spacing: -.035em; overflow-wrap: anywhere; }
     .countryDrawChance { margin: 12px 0 0; color: #87999d; font: .88rem ui-monospace, monospace; }
@@ -842,6 +841,7 @@
   <section id="birthCeremony" class="hidden" aria-live="polite" aria-label="Lễ rút thăm nơi sinh">
     <div id="countryDraw" class="ceremonyStage countryDraw">
       <p class="countryDrawLabel" data-en="Choosing your birthplace">Đang chọn nơi bạn chào đời</p>
+      <canvas id="birthGlobe" class="birthGlobe" width="960" height="480" aria-hidden="true"></canvas>
       <h2 id="countryDrawName" class="countryDrawName">—</h2>
       <p id="countryDrawChance" class="countryDrawChance"></p>
       <p class="countryDrawHint" data-en="Your birthplace is drawn using the selected birth model. The comparison country does not affect the draw.">Nơi sinh được chọn theo cách mô phỏng đã cài đặt. Quốc gia so sánh không ảnh hưởng kết quả quay.</p>
@@ -889,7 +889,7 @@
   </section>
 
   <div class="visuals">
-    <canvas id="scene" width="960" height="360" aria-label="Khung cảnh pixel nơi nhân vật sống"></canvas>
+    <canvas id="scene" width="960" height="300" aria-label="Khung cảnh pixel nơi nhân vật sống"></canvas>
     <div class="sceneCaption"><strong id="sceneCaptionTitle" data-en="Your story begins here">Cuộc đời bạn bắt đầu ở đây</strong><span id="sceneCaptionDetail" data-en="A new life, a new possibility">Một cuộc đời mới, một khả năng mới</span></div>
   </div>
   <p id="birthplace" class="muted" data-en="Birthplace: not chosen yet">Nơi sinh: chưa được chọn</p>
@@ -974,7 +974,7 @@
     <div class="birthHeader"><strong id="birthRecordTitle" data-en="Personal record">Hồ sơ cá nhân</strong><span id="recordNumber">—</span></div>
     <div class="birthBody">
       <div class="passportIdentity">
-        <div class="passportPortrait" id="profilePortrait" aria-hidden="true"><span>•</span></div>
+        <div class="passportPortrait" id="profilePortrait" aria-hidden="true"><img id="profileAvatar" alt=""></div>
         <div class="passportIdentityText">
           <small data-en="NAME">TÊN</small>
           <h2 class="birthName" id="previewName">Đang tạo hồ sơ…</h2>
@@ -1120,6 +1120,7 @@
 </footer>
 
 <script src="mortality-data.js"></script>
+<script src="pixel-art-renderer.js"></script>
 <script>
   "use strict";
 // name-generator.js — tạo tên theo văn hóa từng quốc gia: người chơi, bố mẹ, anh chị em, bạn đời, con.
@@ -7325,6 +7326,11 @@ if (typeof module !== "undefined") module.exports = NameGen;
       ? language === "en" ? "Switch to dark theme" : "Chuyển sang giao diện tối"
       : language === "en" ? "Switch to light theme" : "Chuyển sang giao diện sáng");
     localStorage.setItem("mot-doi-theme-v1", isLight ? "light" : "dark");
+    const profile = state.profile || birthPreview;
+    if (profile) byId("profileAvatar").src = avatarDataUrl(profile, state.profile ? state.age : 0);
+    if (state.profile && state.gameOver) drawFuneralScene();
+    else if (state.birthplace && state.profile) drawScene(state.birthplace.admin1 || state.birthplace.city, state.birthplace.country);
+    else if (birthPreview) drawScene(birthPreview.admin1, birthPreview.country);
   }
   function setLanguage(next) {
     language = next;
@@ -8023,6 +8029,12 @@ if (typeof module !== "undefined") module.exports = NameGen;
   let birthPreview = null;
   let birthCeremonyTimer = null;
   let birthCeremonyToken = 0;
+  let birthGlobeFrame = null;
+  let sceneAnimationFrame = 0;
+  let sceneAnimationStartedAt = 0;
+  let sceneLastFrameAt = 0;
+  let sceneReactionUntil = 0;
+  let sceneClickBound = false;
   const byId = id => document.getElementById(id);
   const randomItem = list => list[Math.floor(Math.random() * list.length)];
   const birthplaceLabel = place => `${place.admin1 || place.city}, ${language === "en" ? translate(place.country) : place.country}`;
@@ -8559,7 +8571,6 @@ if (typeof module !== "undefined") module.exports = NameGen;
     byId("previewName").textContent = birthPreview.name;
     byId("birthRecordTitle").textContent = `${translate("Hồ sơ cá nhân")} · ${birthPreview.iso}`;
     byId("recordNumber").textContent = String(birthPreview.year);
-    byId("profilePortrait").querySelector("span").textContent = Array.from(birthPreview.name.trim())[0]?.toLocaleUpperCase(language) || "•";
     byId("birthStory").textContent = language === "en"
       ? `In ${birthPreview.year}, you are born in a ${englishOf(birthPreview.birthplace).toLowerCase()} area of ${birthPreview.admin1}, ${countryDisplayName(country)}, to a family in income group ${birthPreview.familyTier}/5. You have ${birthPreview.siblings} ${birthPreview.siblings === 1 ? "sibling" : "siblings"}. Simulated years pass faster than real time; your choices shape a life of your own.`
       : `Năm ${birthPreview.year}, bạn chào đời tại khu vực ${birthPreview.birthplace.toLowerCase()} thuộc ${birthPreview.admin1}, ${countryDisplayName(country)}, trong một gia đình thuộc nhóm thu nhập ${birthPreview.familyTier}/5. Bạn có ${birthPreview.siblings} anh chị em. Mỗi năm mô phỏng trôi qua nhanh hơn thời gian thật; lựa chọn của bạn sẽ tạo nên một cuộc đời riêng.`;
@@ -8572,6 +8583,7 @@ if (typeof module !== "undefined") module.exports = NameGen;
   function renderPersonalRecord() {
     const profile = state.profile || birthPreview;
     if (!profile) return;
+    byId("profileAvatar").src = avatarDataUrl(profile, state.profile ? state.age : 0);
     profile.birthMonth ||= 1 + Math.floor(Math.random() * 12);
     ensureProfileTraits(profile);
     const english = language === "en";
@@ -8672,9 +8684,138 @@ if (typeof module !== "undefined") module.exports = NameGen;
     }
   }
 
+  const birthGlobeContinents = [
+    [[-168, 72], [-140, 70], [-124, 55], [-110, 50], [-95, 50], [-82, 25], [-98, 8], [-117, 30], [-135, 53], [-160, 58]],
+    [[-80, 12], [-67, 8], [-48, -4], [-35, -12], [-46, -27], [-54, -42], [-70, -56], [-77, -35], [-73, -10]],
+    [[-12, 36], [-10, 55], [5, 70], [32, 73], [55, 65], [85, 72], [115, 65], [145, 58], [175, 65], [168, 48], [145, 42], [132, 32], [121, 18], [108, 5], [96, 8], [82, 20], [68, 24], [58, 35], [42, 37], [30, 43], [18, 36], [8, 44], [0, 40]],
+    [[-18, 36], [4, 37], [25, 32], [43, 12], [50, 2], [40, -12], [33, -30], [20, -35], [10, -27], [2, -8], [-10, 5], [-17, 18]],
+    [[112, -11], [131, -10], [153, -18], [154, -39], [137, -44], [115, -34]],
+    [[-52, 60], [-42, 82], [-22, 78], [-20, 62], [-36, 58]],
+    [[46, -13], [51, -12], [50, -25], [46, -24]],
+    [[128, 34], [142, 45], [146, 35], [136, 31]],
+    [[95, 6], [112, 6], [118, -6], [105, -9]],
+    [[-9, 59], [2, 59], [1, 50], [-7, 50]]
+  ];
+  let birthGlobeDots = null;
+
+  function pointInBirthContinent(longitude, latitude) {
+    return birthGlobeContinents.some(polygon => {
+      let inside = false;
+      for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+        const [xi, yi] = polygon[i];
+        const [xj, yj] = polygon[j];
+        if ((yi > latitude) !== (yj > latitude) &&
+            longitude < ((xj - xi) * (latitude - yi)) / (yj - yi) + xi) inside = !inside;
+      }
+      return inside;
+    });
+  }
+
+  function getBirthGlobeDots() {
+    if (birthGlobeDots) return birthGlobeDots;
+    birthGlobeDots = [];
+    for (let latitude = -78; latitude <= 78; latitude += 5) {
+      for (let longitude = -178; longitude <= 178; longitude += 5) {
+        if (pointInBirthContinent(longitude, latitude)) {
+          birthGlobeDots.push({ latitude: latitude * Math.PI / 180, longitude: longitude * Math.PI / 180 });
+        }
+      }
+    }
+    return birthGlobeDots;
+  }
+
+  const birthCountryCoordinates = {
+    USA: [-98, 39], CAN: [-106, 57], MEX: [-102, 23], GTM: [-90, 15], CUB: [-79, 22],
+    HTI: [-72, 19], DOM: [-70, 19], COL: [-73, 4], VEN: [-66, 8], ECU: [-78, -1],
+    PER: [-75, -9], BOL: [-64, -17], CHL: [-71, -33], ARG: [-64, -35], BRA: [-52, -10],
+    GBR: [-3, 55], IRL: [-8, 53], FRA: [2, 47], ESP: [-4, 40], PRT: [-8, 39],
+    DEU: [10, 51], ITA: [12, 42], NOR: [10, 62], SWE: [15, 62], FIN: [26, 64],
+    POL: [19, 52], UKR: [32, 49], RUS: [90, 60], TUR: [35, 39], GRC: [22, 39],
+    EGY: [30, 27], MAR: [-7, 32], DZA: [3, 28], TUN: [9, 34], LBY: [18, 26],
+    SDN: [30, 13], ETH: [40, 9], SOM: [46, 6], KEN: [38, 0], UGA: [32, 1],
+    TZA: [35, -6], COD: [23, -3], NGA: [8, 9], GHA: [-2, 8], CIV: [-5, 7],
+    ZAF: [25, -29], MDG: [47, -19], SAU: [45, 24], IRQ: [44, 33], IRN: [53, 32],
+    AFG: [66, 34], PAK: [69, 30], IND: [79, 22], NPL: [84, 28], BGD: [90, 24],
+    LKA: [80, 8], CHN: [105, 35], MNG: [104, 47], JPN: [139, 37], KOR: [128, 36],
+    PRK: [127, 40], TWN: [121, 24], MMR: [96, 21], THA: [101, 16], KHM: [105, 13],
+    VNM: [108, 16], MYS: [102, 4], SGP: [104, 1], IDN: [118, -2], PHL: [122, 12],
+    AUS: [134, -25], NZL: [172, -41], PNG: [145, -6], FJI: [178, -18]
+  };
+
+  function birthCountryCoordinatesFor(country) {
+    const coordinates = birthCountryCoordinates[country.iso];
+    if (coordinates) return coordinates.map(value => value * Math.PI / 180);
+    const hash = [...country.iso].reduce((value, character) => (value * 31 + character.charCodeAt(0)) >>> 0, 7);
+    return [((hash % 340) - 170) * Math.PI / 180, (((hash >>> 8) % 120) - 60) * Math.PI / 180];
+  }
+
+  function drawBirthGlobe(rotation, targetCountry, progress) {
+    const canvas = byId("birthGlobe");
+    const context = canvas.getContext("2d");
+    const width = canvas.width;
+    const height = canvas.height;
+    const centerX = width / 2;
+    const centerY = height / 2;
+    const radius = Math.min(width * .43, height * .43);
+    const light = document.documentElement.dataset.theme === "light";
+    const landColor = light ? [55, 126, 127] : [107, 191, 183];
+    const target = targetCountry ? birthCountryCoordinatesFor(targetCountry) : null;
+    const targetLongitude = target ? target[0] : 0;
+    const targetLatitude = target ? target[1] : 0;
+
+    context.clearRect(0, 0, width, height);
+    const glow = context.createRadialGradient(centerX, centerY, radius * .08, centerX, centerY, radius * 1.25);
+    glow.addColorStop(0, light ? "rgba(77, 166, 157, .08)" : "rgba(65, 151, 145, .11)");
+    glow.addColorStop(1, "rgba(0, 0, 0, 0)");
+    context.fillStyle = glow;
+    context.fillRect(0, 0, width, height);
+    context.beginPath();
+    context.arc(centerX, centerY, radius + 1, 0, Math.PI * 2);
+    context.strokeStyle = light ? "rgba(61, 127, 124, .16)" : "rgba(133, 188, 181, .12)";
+    context.lineWidth = 1;
+    context.stroke();
+
+    for (const dot of getBirthGlobeDots()) {
+      const relativeLongitude = dot.longitude - rotation;
+      const depth = Math.cos(dot.latitude) * Math.cos(relativeLongitude);
+      if (depth < -.035) continue;
+      const x = centerX + radius * Math.cos(dot.latitude) * Math.sin(relativeLongitude);
+      const y = centerY - radius * Math.sin(dot.latitude);
+      const isNearTarget = target && Math.abs(dot.latitude - targetLatitude) < .11 &&
+        Math.abs(Math.atan2(Math.sin(dot.longitude - targetLongitude), Math.cos(dot.longitude - targetLongitude))) < .11;
+      const brightness = Math.max(.2, .47 + depth * .48);
+      const opacity = isNearTarget && progress >= .94 ? .95 : brightness;
+      context.beginPath();
+      context.arc(x, y, isNearTarget && progress >= .94 ? 2.5 : .95 + brightness * .7, 0, Math.PI * 2);
+      context.fillStyle = `rgba(${landColor[0]}, ${landColor[1]}, ${landColor[2]}, ${opacity})`;
+      context.fill();
+    }
+
+    if (target && progress >= .82) {
+      const relativeLongitude = targetLongitude - rotation;
+      const depth = Math.cos(targetLatitude) * Math.cos(relativeLongitude);
+      if (depth > 0) {
+        const x = centerX + radius * Math.cos(targetLatitude) * Math.sin(relativeLongitude);
+        const y = centerY - radius * Math.sin(targetLatitude);
+        const pulse = .5 + .5 * Math.sin(performance.now() / 150);
+        const marker = context.createRadialGradient(x, y, 1, x, y, 18 + pulse * 9);
+        marker.addColorStop(0, light ? "rgba(235, 132, 92, .9)" : "rgba(244, 163, 118, .9)");
+        marker.addColorStop(1, "rgba(244, 163, 118, 0)");
+        context.fillStyle = marker;
+        context.fillRect(x - 28, y - 28, 56, 56);
+        context.beginPath();
+        context.arc(x, y, 2.5 + pulse, 0, Math.PI * 2);
+        context.fillStyle = light ? "#db7655" : "#f6ae84";
+        context.fill();
+      }
+    }
+  }
+
   function closeBirthCeremony() {
     birthCeremonyToken++;
     clearTimeout(birthCeremonyTimer);
+    if (birthGlobeFrame !== null) cancelAnimationFrame(birthGlobeFrame);
+    birthGlobeFrame = null;
     birthCeremonyTimer = null;
     byId("birthCeremony").classList.add("hidden");
     document.body.classList.remove("birth-ceremony-open");
@@ -8683,7 +8824,7 @@ if (typeof module !== "undefined") module.exports = NameGen;
   }
 
   function beginBirthCeremony() {
-    if (birthCeremonyTimer) return;
+    if (birthCeremonyTimer || birthGlobeFrame !== null) return;
     loadCurrencyRates();
     birthPreview = createBirthProfile(weightedCountry());
     const targetCountry = countries.find(country => country.iso === birthPreview.iso);
@@ -8699,35 +8840,45 @@ if (typeof module !== "undefined") module.exports = NameGen;
     document.body.classList.add("birth-ceremony-open");
     window.scrollTo(0, 0);
 
-    let step = 0;
-    const totalSteps = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 1 : 27;
-    const showNextCountry = () => {
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const startTime = performance.now();
+    const duration = reducedMotion ? 650 : 6200;
+    const initialRotation = Math.random() * Math.PI * 2;
+    const targetLongitude = birthCountryCoordinatesFor(targetCountry)[0];
+    const rotationDistance = ((targetLongitude - initialRotation) % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2);
+    const finalRotation = initialRotation + rotationDistance + Math.PI * 4;
+    let lastNameAt = 0;
+    const animateGlobe = now => {
       if (token !== birthCeremonyToken) return;
-      const finalStep = step >= totalSteps;
-      const country = finalStep ? targetCountry : randomItem(countries);
-      byId("countryDrawName").textContent = countryDisplayName(country);
-      const chance = countrySelectionProbability(country);
-      byId("countryDrawChance").textContent = finalStep
-        ? `${language === "en" ? "Probability" : "Xác suất"}  ${fmt(chance * 100, 1)}%`
-        : "";
-      if (finalStep) {
-        birthCeremonyTimer = window.setTimeout(() => {
-          if (token !== birthCeremonyToken) return;
-          birthCeremonyTimer = null;
-          renderBirthPreview(true);
-          renderCeremonyRecord();
-          byId("countryDraw").classList.add("hidden");
-          byId("ceremonyRecord").classList.remove("hidden");
-          byId("ceremonyStartBtn").focus();
-        }, 1200);
+      const progress = Math.min(1, (now - startTime) / duration);
+      const eased = 1 - Math.pow(1 - progress, 4);
+      drawBirthGlobe(initialRotation + (finalRotation - initialRotation) * eased, targetCountry, progress);
+      if (now - lastNameAt > 75 + progress * 260) {
+        byId("countryDrawName").textContent = progress >= .97
+          ? countryDisplayName(targetCountry)
+          : countryDisplayName(randomItem(countries));
+        lastNameAt = now;
+      }
+      if (progress < 1) {
+        birthGlobeFrame = requestAnimationFrame(animateGlobe);
         return;
       }
-      step++;
-      const progress = step / totalSteps;
-      const delay = 45 + Math.round(520 * progress * progress);
-      birthCeremonyTimer = window.setTimeout(showNextCountry, delay);
+      birthGlobeFrame = null;
+      drawBirthGlobe(finalRotation, targetCountry, 1);
+      const chance = countrySelectionProbability(targetCountry);
+      byId("countryDrawName").textContent = countryDisplayName(targetCountry);
+      byId("countryDrawChance").textContent = `${language === "en" ? "Probability" : "Xác suất"}  ${fmt(chance * 100, 1)}%`;
+      birthCeremonyTimer = window.setTimeout(() => {
+        if (token !== birthCeremonyToken) return;
+        birthCeremonyTimer = null;
+        renderBirthPreview(true);
+        renderCeremonyRecord();
+        byId("countryDraw").classList.add("hidden");
+        byId("ceremonyRecord").classList.remove("hidden");
+        byId("ceremonyStartBtn").focus();
+      }, reducedMotion ? 150 : 900);
     };
-    showNextCountry();
+    birthGlobeFrame = requestAnimationFrame(animateGlobe);
   }
 
   function setupOptions() {
@@ -10156,6 +10307,7 @@ if (typeof module !== "undefined") module.exports = NameGen;
     const ending = byId("ending");
     ending.classList.remove("hidden");
     byId("gameDashboard").classList.remove("hidden");
+    drawFuneralScene();
     byId("endingTitle").textContent = translate(title);
     byId("endingSummary").textContent = language === "en"
       ? `${state.profile.name} was born in ${state.birthYear} in ${birthplaceLabel(state.birthplace)}; their journey ended at age ${state.age}. Simulated average: ${average}/100.`
@@ -10558,8 +10710,177 @@ if (typeof module !== "undefined") module.exports = NameGen;
     }
   }
 
+  function avatarDataUrl(profile, age) {
+    const renderer = window.PixelArtRenderer;
+    if (!renderer) throw new Error("Pixel-art renderer did not load.");
+    const iso = profile.iso;
+    const inRegion = codes => codes.split(",").includes(iso);
+    const region = inRegion("BEN,BFA,BDI,CMR,CAF,TCD,COD,COG,CIV,DJI,ERI,ETH,GAB,GHA,GIN,GMB,KEN,LBR,MDG,MLI,MOZ,MRT,MWI,NAM,NER,NGA,RWA,SDN,SEN,SLE,SOM,SSD,TGO,TZA,UGA,ZAF,ZMB,ZWE")
+      ? "ssa"
+      : inRegion("IND,PAK,BGD,NPL,LKA,BTN,MDV")
+        ? "sa"
+        : inRegion("DZA,EGY,IRN,IRQ,ISR,JOR,LBN,LBY,MAR,PSE,SAU,SYR,TUN,TUR,YEM")
+          ? "mena"
+          : inRegion("CHN,HKG,JPN,KOR,PRK,TWN,MNG,SGP,VNM,THA,LAO,KHM,MMR,MYS,IDN,PHL,TLS,BRN,AUS,NZL,PNG,FJI,SLB,VUT")
+            ? "eap"
+            : inRegion("ARG,ATG,BHS,BLZ,BOL,BRA,BRB,CHL,COL,CRI,CUB,DOM,ECU,SLV,GRD,GTM,GUY,HTI,HND,JAM,MEX,NIC,PAN,PER,PRY,SUR,TTO,URY,VEN")
+              ? "lac"
+              : inRegion("ALB,AND,ARM,AUT,AZE,BEL,BGR,BIH,BLR,CHE,CYP,CZE,DEU,DNK,ESP,EST,FIN,FRA,GBR,GEO,GRC,HRV,HUN,IRL,ISL,ITA,KAZ,KGZ,LIE,LTU,LUX,LVA,MDA,MKD,MLT,MNE,NLD,NOR,POL,PRT,ROU,RUS,SRB,SVK,SVN,SWE,TJK,TKM,UKR,UZB")
+                ? "eca" : "hi";
+    const seed = profileAvatarSeed(profile);
+    const svg = renderer.generateAvatarSvg({
+      sex: profile.sex === "female" ? "F" : "M",
+      age: Math.max(0, Number(age) || 0),
+      region,
+      seed,
+      dark: document.documentElement.dataset.theme === "dark"
+    });
+    return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+  }
+
+  function profileAvatarSeed(profile) {
+    const seedText = `${profile.iso}:${profile.name}:${profile.year}`;
+    return [...seedText].reduce((hash, character) => (hash * 31 + character.charCodeAt(0)) >>> 0, 7919);
+  }
+
   function drawScene(city, country) {
-    drawCalmPixelLandscape(city, country);
+    const renderer = window.PixelArtRenderer;
+    if (!renderer) throw new Error("Pixel-art renderer did not load.");
+    const profile = state.birthplace && state.profile ? state.profile : birthPreview || state.profile;
+    const iso = profile?.iso || countries.find(item => item.name === country)?.iso || "VNM";
+    const activeLife = Boolean(state.birthplace && state.profile);
+    const age = activeLife ? state.age : 0;
+    const sex = profile?.sex === "female" ? "F" : "M";
+    const happiness = Number(state.stats?.happiness) || 50;
+    const job = activeLife ? String(state.job || "") : "";
+    const prop = age >= 65 && !job
+      ? "retired"
+      : /nông nghiệp|nông dân|thủ công/i.test(job) ? "crops"
+        : /dịch vụ|bán hàng|cửa hàng|kinh doanh/i.test(job) ? "stall"
+          : /vận động viên|thể thao/i.test(job) ? "flag"
+            : /giáo viên|giảng viên/i.test(job) ? "school"
+              : /bác sĩ|y tá|điều dưỡng/i.test(job) ? "clinic"
+                : /công nhân|nhà máy|may mặc/i.test(job) ? "factory"
+                  : /xây dựng|thợ xây/i.test(job) ? "crane"
+                    : /tài xế|giao hàng/i.test(job) ? "truck"
+                      : job && job !== "Chưa đi làm" ? "office"
+                        : age >= 6 && age < 22 ? "school" : "seeking";
+    const region = ["DZA", "EGY", "IRN", "IRQ", "ISR", "JOR", "LBN", "LBY", "MAR", "PSE", "SAU", "SYR", "TUN", "TUR", "YEM"].includes(iso)
+      ? "mena"
+      : ["BEN", "BFA", "BDI", "CMR", "CAF", "TCD", "COD", "COG", "CIV", "DJI", "ERI", "ETH", "GAB", "GHA", "GIN", "GMB", "KEN", "LBR", "MDG", "MLI", "MOZ", "MRT", "MWI", "NAM", "NER", "NGA", "RWA", "SDN", "SEN", "SLE", "SOM", "SSD", "TGO", "TZA", "UGA", "ZAF", "ZMB", "ZWE"].includes(iso)
+        ? "ssa"
+        : ["VNM", "THA", "LAO", "KHM", "MMR", "MYS", "IDN", "PHL", "TLS", "BRN"].includes(iso)
+          ? "se"
+          : ["IND", "PAK", "BGD", "NPL", "LKA", "BTN", "MDV"].includes(iso)
+            ? "s" : "n";
+    const skin = renderer.skinForCountry(iso);
+    const wealth = Math.max(0, (activeLife ? Number(state.wealth) || 0 : 0) +
+      Number(profile?.gdp) * (Number(profile?.familyTier) || 1));
+    const people = [];
+    if (activeLife && age < 18) {
+      people.push(
+        { role: "par", sex: "M", age: age + (Number(profile.fatherAge) || 30), sk: skin },
+        { role: "par", sex: "F", age: age + (Number(profile.motherAge) || 27), sk: skin }
+      );
+    }
+    people.push({ role: "me", sex, age, sk: skin });
+    if (activeLife && state.partner) {
+      people.push({ role: "pt", sex: sex === "M" ? "F" : "M", age, sk: skin });
+    }
+    if (activeLife) {
+      const childCount = Math.min(Number(state.children) || 0, 2);
+      for (let index = 0; index < childCount; index++) {
+        const ageGap = Math.max(1, Math.floor(Math.max(1, age - 18) / (childCount + 1)) * (index + 1));
+        people.push({
+          role: "kid",
+          sex: (index + (sex === "F" ? 1 : 0)) % 2 ? "F" : "M",
+          age: Math.max(0, age - ageGap),
+          sk: skin
+        });
+      }
+    }
+    const home = activeLife && state.housing === "Nhà riêng"
+      ? wealth > 20000 ? "mansion" : "house"
+      : profile?.urban
+        ? "flat"
+        : (Number(profile?.familyTier) || 1) <= 2 ? "hut" : "house";
+    const model = {
+      stage: age < 13 ? "m" : age < 60 ? "d" : "e",
+      mood: happiness < 35 ? "low" : happiness >= 70 ? "high" : "mid",
+      urban: Boolean(profile?.urban),
+      region,
+      wealth,
+      home,
+      prop,
+      sex,
+      age,
+      sk: skin,
+      seed: `${iso}:${city}:${profile?.name || "life"}`,
+      people,
+      pet: activeLife && state.lifeFlags?.pet ? "d" : null
+    };
+    const canvas = byId("scene");
+    if (!sceneClickBound) {
+      canvas.addEventListener("click", () => {
+        sceneReactionUntil = performance.now() + 900;
+      });
+      sceneClickBound = true;
+    }
+    if (sceneAnimationFrame) cancelAnimationFrame(sceneAnimationFrame);
+    sceneAnimationStartedAt = performance.now();
+    sceneLastFrameAt = 0;
+    const animate = now => {
+      if (now - sceneLastFrameAt >= 40) {
+        const elapsed = now - sceneAnimationStartedAt;
+        const palette = renderer.pxPalette(document.documentElement.dataset.theme === "dark");
+        if (profile) palette.me = renderer.avatarShirtColor(
+          profileAvatarSeed(profile),
+          document.documentElement.dataset.theme === "dark"
+        );
+        const pixels = renderer.pxScene(model, palette, {
+          blink: elapsed % 3200 < 140,
+          breathe: Math.sin(elapsed / 800 * Math.PI) > .35,
+          cloudOffset: elapsed / 40 % (renderer.PX.W + 40),
+          jump: sceneReactionUntil > now,
+          heart: sceneReactionUntil > now
+        });
+        drawPixelRaster(renderer, pixels);
+        sceneLastFrameAt = now;
+      }
+      sceneAnimationFrame = requestAnimationFrame(animate);
+    };
+    sceneAnimationFrame = requestAnimationFrame(animate);
+    const sceneYear = activeLife ? state.birthYear : profile?.year || state.birthYear;
+    byId("sceneCaptionDetail").textContent = language === "en"
+      ? `${city}, ${translate(country)} · ${sceneYear}`
+      : `${city}, ${country} · ${sceneYear}`;
+  }
+
+  function drawFuneralScene() {
+    const renderer = window.PixelArtRenderer;
+    if (!renderer) throw new Error("Pixel-art renderer did not load.");
+    if (sceneAnimationFrame) cancelAnimationFrame(sceneAnimationFrame);
+    sceneAnimationFrame = 0;
+    const profile = state.profile;
+    const palette = renderer.pxPalette(document.documentElement.dataset.theme === "dark");
+    const pixels = renderer.pxFuneral({
+      seed: `${profile.iso}:${profile.name}:${state.age}`,
+      sk: renderer.skinForCountry(profile.iso),
+      old: state.age >= 65
+    }, palette);
+    drawPixelRaster(renderer, pixels);
+  }
+
+  function drawPixelRaster(renderer, pixels) {
+    const canvas = byId("scene");
+    const context = canvas.getContext("2d");
+    const source = document.createElement("canvas");
+    source.width = renderer.PX.W;
+    source.height = renderer.PX.H;
+    renderer.pxDrawToCanvas(pixels, source);
+    context.imageSmoothingEnabled = false;
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.drawImage(source, 0, 0, canvas.width, canvas.height);
   }
 
   function drawCalmPixelLandscape(city, country) {
@@ -10683,14 +11004,19 @@ if (typeof module !== "undefined") module.exports = NameGen;
       rect("#f2d8a7", 230, 101, 6, 5); rect("#805e4a", 221, 105, 7, 11);
     }
 
-    rect(water, 0, 128, 480, 52);
-    rect("#b2c9a0", 0, 126, 480, 3);
-    rect("#e2ce9c", 0, 131, 480, 2);
-    polygon(waterDeep, [[0, 145], [56, 142], [109, 148], [164, 140], [222, 147], [277, 141], [329, 148], [386, 141], [440, 147], [480, 144], [480, 180], [0, 180]]);
-    rect("#c4d2ad", 0, 132, 480, 1);
+    rect("#bba77b", 0, 126, 480, 17);
+    rect("#d6c18f", 0, 126, 480, 2);
+    for (let i = 0; i < 34; i++) {
+      const x = Math.floor(rnd() * 480);
+      const y = 130 + Math.floor(rnd() * 11);
+      rect(i % 3 ? "#819568" : "#d1b985", x, y, 2 + (i % 3), 1);
+    }
+    rect(water, 0, 143, 480, 37);
+    polygon(waterDeep, [[0, 160], [56, 157], [109, 163], [164, 155], [222, 162], [277, 156], [329, 163], [386, 156], [440, 162], [480, 159], [480, 180], [0, 180]]);
+    rect("#c4d2ad", 0, 147, 480, 1);
     for (let i = 0; i < 32; i++) {
       const x = Math.floor(rnd() * 475);
-      const y = 137 + Math.floor(rnd() * 35);
+      const y = 149 + Math.floor(rnd() * 28);
       rect(i % 3 ? "#9ec5b4" : "#d9d2a8", x, y, 5 + Math.floor(rnd() * 13), 1);
       if (i % 4 === 0) rect("#e9dfb6", x + 2, y + 2, 3, 1);
     }
@@ -10710,7 +11036,12 @@ if (typeof module !== "undefined") module.exports = NameGen;
       rect(i % 2 ? "#e8d39b" : "#d79e78", x, y, 2, 1);
     }
 
-    drawCharacter(p, 242, 128, iso);
+    drawScenePeople(p, iso);
+    drawCharacter(p, state.profile ? 255 : 242, 145, iso, {
+      age: state.profile ? state.age : 0,
+      sex: state.profile?.sex,
+      scale: state.profile ? undefined : 0.72
+    });
     ctx.imageSmoothingEnabled = false;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(tiny, 0, 0, canvas.width, canvas.height);
@@ -10901,11 +11232,41 @@ if (typeof module !== "undefined") module.exports = NameGen;
       : `${city}, ${country} · ${sceneYear}`;
   }
 
-  function drawCharacter(p, centerX, groundY, iso) {
-    const skin = ["IND", "NGA", "EGY", "IDN"].includes(iso) ? "#9b5d43" : iso === "VNM" ? "#c98665" : "#d69a78";
-    const hair = state.age >= 65 ? "#c7c5b8" : ["USA", "FRA"].includes(iso) ? "#493b35" : "#302a29";
-    const shirt = ({ VNM: "#278d83", IND: "#268c82", NGA: "#398879", USA: "#398879", JPN: "#348b83", BRA: "#388b68", IDN: "#278d83", MEX: "#388b68", EGY: "#348b83", FRA: "#398879" })[iso] || "#278d83";
-    const scale = 1.4;
+  function drawScenePeople(p, iso) {
+    const residents = state.age < 13
+      ? [
+          { centerX: 139, age: 32, scale: 0.62, shirt: "#a85f4f", sex: "female" },
+          { centerX: 393, age: 9, scale: 0.52, shirt: "#d09b47" }
+        ]
+      : [
+          { centerX: 139, age: 27, scale: 0.62, shirt: "#a85f4f", sex: "female" },
+          { centerX: 393, age: 42, scale: 0.68, shirt: "#d09b47" }
+        ];
+    for (const resident of residents) drawCharacter(p, resident.centerX, 143, iso, resident);
+    if (state.partner) {
+      drawCharacter(p, 316, 145, iso, {
+        age: state.age,
+        scale: state.age < 18 ? 1.08 : 1.25,
+        sex: state.profile?.sex === "female" ? "male" : "female",
+        shirt: "#d26e78"
+      });
+    }
+    for (let index = 0; index < Math.min(state.children || 0, 2); index++) {
+      drawCharacter(p, 365 + index * 33, 145, iso, {
+        age: Math.max(2, Math.min(12, state.age - 22 - index * 3)),
+        scale: 0.68,
+        shirt: index ? "#7198bd" : "#d09b47"
+      });
+    }
+  }
+
+  function drawCharacter(p, centerX, groundY, iso, person = {}) {
+    const age = Number.isFinite(person.age) ? person.age : state.age;
+    const defaultScale = age < 3 ? 0.72 : age < 6 ? 0.9 : age < 13 ? 1.22 : age < 18 ? 1.5 : age < 65 ? 1.8 : 1.65;
+    const skin = person.skin || (["IND", "NGA", "EGY", "IDN"].includes(iso) ? "#9b5d43" : iso === "VNM" ? "#c98665" : "#d69a78");
+    const hair = age >= 65 ? "#c7c5b8" : ["USA", "FRA"].includes(iso) ? "#493b35" : "#302a29";
+    const shirt = person.shirt || ({ VNM: "#278d83", IND: "#268c82", NGA: "#398879", USA: "#398879", JPN: "#348b83", BRA: "#388b68", IDN: "#278d83", MEX: "#388b68", EGY: "#348b83", FRA: "#398879" })[iso] || "#278d83";
+    const scale = person.scale || defaultScale;
     const x = centerX - 17 * scale;
     const top = groundY - 46 * scale;
     const px = (color, dx, dy, width, height) => {
@@ -10913,30 +11274,58 @@ if (typeof module !== "undefined") module.exports = NameGen;
       p.fillRect(Math.round(x + dx * scale), Math.round(top + dy * scale), Math.round(width * scale), Math.round(height * scale));
     };
     const outline = "#332e2b";
+    const pants = age < 4 ? shirt : ["#334757", "#4d514a", "#493d3c"][Math.floor(centerX) % 3];
+    const shoes = person.shoes || "#302c2b";
 
-    px("#526d63", 5, 43, 25, 2);
-    px("#293c3c", 9, 39, 7, 4); px("#293c3c", 21, 39, 7, 4);
-    px("#5d4940", 10, 37, 6, 3); px("#5d4940", 21, 37, 6, 3);
-    px(outline, 10, 29, 6, 10); px(outline, 21, 29, 6, 10);
-    px("#54705e", 11, 30, 4, 8); px("#54705e", 22, 30, 4, 8);
+    px("#425b51", 3, 44, 29, 2);
+    px(outline, 7, 40, 10, 4); px(outline, 19, 40, 10, 4);
+    px(shoes, 8, 40, 8, 2); px(shoes, 20, 40, 8, 2);
+    px("#d6c6a2", 8, 39, 8, 1); px("#d6c6a2", 20, 39, 8, 1);
+    px(outline, 9, 29, 8, 11); px(outline, 20, 29, 8, 11);
+    px(pants, 10, 30, 6, 8); px(pants, 21, 30, 6, 8);
+    px("#65716a", 10, 37, 6, 1); px("#65716a", 21, 37, 6, 1);
+    px("#899086", 11, 31, 1, 3); px("#899086", 22, 31, 1, 3);
 
-    px(outline, 6, 19, 23, 15);
-    px(shirt, 8, 20, 19, 12);
-    px("#55a99a", 10, 21, 3, 9);
-    px(outline, 4, 20, 5, 11); px(outline, 26, 20, 5, 11);
-    px(shirt, 5, 21, 4, 8); px(shirt, 27, 21, 3, 8);
-    px(skin, 5, 28, 4, 4); px(skin, 27, 28, 3, 4);
+    px(outline, 6, 19, 22, 15);
+    px(outline, 8, 18, 18, 3);
+    px(shirt, 8, 20, 18, 11);
+    px(person.shirtShade || "#1e706e", 9, 27, 16, 4);
+    px("#55a99a", 10, 21, 3, 6);
+    px("#acd0b2", 11, 21, 1, 5);
+    px(outline, 4, 20, 5, 8); px(outline, 26, 20, 5, 8);
+    px(shirt, 5, 21, 4, 5); px(shirt, 27, 21, 3, 5);
+    px("#acd0b2", 6, 22, 1, 3); px("#acd0b2", 28, 22, 1, 3);
+    px(outline, 4, 26, 5, 5); px(outline, 26, 26, 5, 5);
+    px(skin, 5, 27, 3, 4); px(skin, 27, 27, 3, 4);
+    px("#e2aa83", 6, 28, 1, 2); px("#e2aa83", 28, 28, 1, 2);
     px(outline, 14, 17, 8, 5); px(skin, 15, 17, 6, 5);
+    px("#b9765a", 15, 20, 6, 1);
+    px("#f0d7ad", 14, 19, 3, 2); px("#f0d7ad", 20, 19, 3, 2);
+    px(person.shirtShade || "#1e706e", 12, 22, 1, 1);
+    px("#e4c894", 16, 23, 1, 1); px("#e4c894", 16, 26, 1, 1);
+    px("#263b43", 8, 31, 19, 2);
+    px("#d6b878", 16, 31, 3, 2);
     px(outline, 9, 4, 16, 16);
     px(skin, 11, 6, 12, 12);
-    px("#e2aa83", 12, 7, 3, 3); px("#754b3e", 11, 15, 12, 3);
+    px("#e2aa83", 12, 7, 3, 3);
+    px("#e9b08a", 12, 12, 2, 2); px("#b9755d", 20, 12, 2, 2);
     px(skin, 9, 9, 3, 5); px(skin, 22, 9, 3, 5);
+    px("#b9755d", 9, 11, 2, 2); px("#b9755d", 23, 11, 2, 2);
     px(outline, 9, 4, 16, 5); px(hair, 11, 3, 12, 5);
-    px(hair, 9, 6, 4, 8); px(hair, 22, 6, 4, 8);
+    px(hair, 9, 6, 4, person.sex === "female" ? 13 : 8);
+    px(hair, 22, 6, 4, person.sex === "female" ? 13 : 8);
+    px(hair, 10, 7, 4, 3); px(hair, 17, 7, 5, 2);
+    px(person.hairLight || "#645047", 12, 4, 4, 1);
+    px(person.hairLight || "#645047", 18, 5, 3, 1);
+    px("#f0c29a", 11, 8, 1, 3); px("#f0c29a", 22, 8, 1, 3);
     px("#211f20", 13, 10, 2, 2); px("#211f20", 19, 10, 2, 2);
     px("#fff0d1", 13, 10, 1, 1); px("#fff0d1", 19, 10, 1, 1);
     px("#633f37", 15, 15, 5, 1);
-    if (state.age >= 65) {
+    px("#48312f", 16, 13, 2, 1);
+    if (age >= 14 && age < 65) {
+      px("#b8d5d0", 13, 12, 2, 1); px("#b8d5d0", 19, 12, 2, 1);
+    }
+    if (age >= 65) {
       px("#d8d5c8", 10, 7, 3, 3); px("#d8d5c8", 23, 7, 2, 3);
     }
   }
